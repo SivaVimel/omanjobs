@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oman Jobs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#121212; --bg-2:#1E1E1E; --surface:#1E1E1E; --surface-2:#2A2A2A;
+  --border:rgba(255,255,255,.09); --border-soft:rgba(255,255,255,.05); --border-cyan:rgba(0,188,212,.38);
+  --black:#E8E8E8; --silver:#B0B0B0; --silver-2:#9A9A9A; --muted:#808080; --dim:#6A6A6A;
+  --cyan:#00BCD4; --cyan-bright:#26C6DA; --cyan-deep:#3ED6E8; --cyan-glow:rgba(0,188,212,.28);
+  --cyan-wash:rgba(0,188,212,.10); --on-cyan:#06222A;
+  --radius-sm:10px; --radius:16px; --radius-lg:24px;
+  --font:"Inter",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,system-ui,sans-serif;
+  --mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--black);font-family:var(--font);
+  font-feature-settings:"ss01","cv11";-webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;line-height:1.5;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(1200px 620px at 88% -12%,rgba(0,188,212,.10),transparent 60%),
+             radial-gradient(900px 500px at 0% 28%,rgba(0,188,212,.04),transparent 60%)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+::selection{background:var(--cyan);color:#fff}
+.gr-silver{background:linear-gradient(180deg,#FFFFFF 0%,#9A9A9A 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gr-cyan{background:linear-gradient(180deg,#5CE1F2 0%,#00ACC1 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ── nav ── */
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;
+  padding:14px 30px;backdrop-filter:saturate(160%) blur(20px);
+  -webkit-backdrop-filter:saturate(160%) blur(20px);background:rgba(18,18,18,.72);
+  border-bottom:1px solid transparent;transition:background .25s,border-color .25s}
+.topbar[data-scrolled="true"]{background:rgba(18,18,18,.88);border-bottom-color:rgba(255,255,255,.07)}
+.brand{display:flex;align-items:baseline;gap:11px;flex-shrink:0}
+.wordmark{font-size:19px;font-weight:600;letter-spacing:-.015em;display:inline-flex;gap:2px}
+.tagline{font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.14em}
+.searchwrap{position:relative;flex:1;max-width:600px}
+.searchwrap svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--muted)}
+#q{width:100%;padding:12px 16px 12px 43px;border:1px solid var(--border);border-radius:14px;
+  background:var(--surface-2);font-size:15px;font-family:var(--font);color:var(--black);
+  transition:border-color .2s,box-shadow .2s,background .2s}
+#q::placeholder{color:var(--dim)}
+#q:focus{outline:none;border-color:var(--border-cyan);background:var(--surface);box-shadow:0 0 0 4px var(--cyan-wash)}
+.count{margin-left:auto;text-align:right;flex-shrink:0}
+.count .big{font-size:22px;font-weight:700;line-height:1;letter-spacing:-.02em}
+.count .lbl{font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.14em}
+.filterToggle{display:none}
+
+/* ── layout ── */
+.layout{display:grid;grid-template-columns:270px 1fr;align-items:start;position:relative;z-index:1}
+.rail{position:sticky;top:65px;align-self:start;height:calc(100vh - 65px);overflow-y:auto;
+  padding:28px 24px 44px;border-right:1px solid var(--border)}
+.results{padding:26px 30px 90px;min-width:0}
+
+/* ── filters ── */
+.fgroup{margin-bottom:30px}
+.eyebrow{display:inline-block;font-size:11px;font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--cyan-deep);margin:0 0 14px;padding:5px 12px;
+  border:1px solid var(--border-cyan);border-radius:999px;background:var(--cyan-wash)}
+.srcrow{display:flex;align-items:center;gap:11px;width:100%;background:none;border:1px solid transparent;
+  padding:9px 11px;border-radius:12px;text-align:left;color:var(--black);font-size:14px;transition:all .18s}
+.srcrow:hover{background:var(--bg-2)}
+.srcrow .dot{width:8px;height:8px;border-radius:50%;background:var(--dim);flex-shrink:0;transition:background .18s}
+.srcrow .nm{flex:1;font-weight:500;text-transform:capitalize}
+.srcrow .ct{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.srcrow[aria-pressed="true"]{background:var(--surface);border-color:var(--border)}
+.srcrow[aria-pressed="true"] .dot{background:var(--cyan)}
+.srcrow[aria-pressed="true"] .ct{color:var(--cyan-deep);font-weight:500}
+.srcrow[aria-pressed="false"]{opacity:.45}
+.srcrow[aria-pressed="false"] .nm{text-decoration:line-through;text-decoration-color:var(--border)}
+.locinput{width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:12px;
+  background:var(--surface-2);font-size:14px;font-family:var(--font);margin-bottom:12px}
+.locinput:focus{outline:none;border-color:var(--border-cyan);background:var(--surface);box-shadow:0 0 0 3px var(--cyan-wash)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--border);
+  background:var(--surface);color:var(--silver-2);transition:all .16s}
+.chip:hover{border-color:var(--border-cyan);color:var(--cyan-deep)}
+.chip[aria-pressed="true"]{background:var(--cyan);border-color:var(--cyan);color:var(--on-cyan);font-weight:500}
+.togglerow{display:flex;align-items:center;justify-content:space-between;padding:8px 2px;font-size:14px;color:var(--silver)}
+.switch{position:relative;width:40px;height:23px;border-radius:999px;border:0;background:#3A3A3C;transition:background .18s;flex-shrink:0}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .18s}
+.switch[aria-pressed="true"]{background:var(--cyan)}
+.switch[aria-pressed="true"]::after{left:19px}
+.clearbtn{width:100%;margin-top:8px;padding:11px;border:1px solid var(--border);border-radius:12px;
+  background:var(--surface);color:var(--silver-2);font-size:13px;font-weight:500;transition:all .16s}
+.clearbtn:hover{border-color:var(--border-cyan);color:var(--cyan-deep)}
+
+/* ── toolbar ── */
+.toolbar{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.showing{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.showing b{color:var(--black);font-weight:500}
+.sortwrap{margin-left:auto;display:flex;align-items:center;gap:9px}
+.sortwrap label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--dim)}
+#sort{padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface-2);
+  font-size:13px;font-family:var(--font);color:var(--black)}
+#sort:focus{outline:none;border-color:var(--border-cyan)}
+.activebar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:5px 7px 5px 13px;
+  border-radius:999px;background:var(--cyan-wash);color:var(--cyan-deep);border:1px solid var(--border-cyan)}
+.pill button{border:0;background:none;color:var(--cyan-deep);font-size:15px;line-height:1;padding:0 3px;opacity:.65}
+.pill button:hover{opacity:1}
+
+/* ── grid + cards ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(348px,1fr));gap:18px}
+.card{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:22px 22px 20px;box-shadow:0 1px 2px rgba(0,0,0,.03);cursor:pointer;display:flex;
+  flex-direction:column;gap:12px;overflow:hidden;transition:border-color .2s,transform .2s,box-shadow .25s}
+.card:hover{border-color:var(--border-cyan);transform:translateY(-3px);box-shadow:0 10px 34px -10px rgba(0,188,212,.22)}
+.card:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.chead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.srctag{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan-deep);
+  padding:3px 10px;border:1px solid var(--border-cyan);border-radius:999px;background:var(--cyan-wash)}
+.posted{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.ctitle{font-size:17px;font-weight:600;line-height:1.3;margin:0;letter-spacing:-.015em;color:var(--black)}
+.ccompany{display:flex;align-items:center;gap:8px;color:var(--silver-2);font-size:13.5px;font-weight:500;margin-top:-4px}
+.ccompany svg{width:14px;height:14px;flex-shrink:0;color:var(--dim)}
+.databox{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border-soft);
+  border:1px solid var(--border-soft);border-radius:var(--radius-sm);overflow:hidden}
+.databox.one{grid-template-columns:1fr}
+.databox .cell:last-child:nth-child(odd){grid-column:1/-1}
+.cell{background:var(--surface-2);padding:9px 12px;min-width:0}
+.cell .k{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:3px}
+.cell .v{display:block;font-size:13px;color:var(--black);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cell .v.wrap{white-space:normal}
+.cdesc{font-size:13.5px;color:var(--silver);line-height:1.55;margin:0;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.skills{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;padding-top:2px}
+.skill{font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:8px;background:var(--bg-2);
+  color:var(--silver-2);border:1px solid var(--border-soft);transition:all .16s}
+.skill:hover{border-color:var(--border-cyan);color:var(--cyan-deep);background:var(--cyan-wash)}
+.more{font-family:var(--mono);font-size:11px;color:var(--dim);padding:4px 4px}
+
+/* ── pager ── */
+.pager{display:flex;justify-content:center;align-items:center;gap:7px;margin-top:38px;flex-wrap:wrap}
+.pager button{min-width:40px;height:40px;padding:0 13px;border:1px solid var(--border);background:var(--surface);
+  border-radius:12px;font-family:var(--mono);font-size:13px;color:var(--silver-2);transition:all .16s}
+.pager button:hover:not(:disabled){border-color:var(--border-cyan);color:var(--cyan-deep);transform:translateY(-1px)}
+.pager button.on{background:var(--cyan);border-color:var(--cyan);color:var(--on-cyan);font-weight:500}
+.pager button:disabled{opacity:.4;cursor:default}
+.pager .gap{color:var(--dim);font-family:var(--mono)}
+
+/* ── states ── */
+.state{grid-column:1/-1;text-align:center;padding:90px 20px;color:var(--muted)}
+.state .em{font-size:20px;font-weight:600;color:var(--black);margin-bottom:6px;letter-spacing:-.01em}
+.spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── detail sheet ── */
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);z-index:60;
+  display:none;opacity:0;transition:opacity .2s}
+.backdrop.open{display:block;opacity:1}
+.sheet{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--bg);z-index:61;
+  box-shadow:-24px 0 60px -34px rgba(0,0,0,.4);transform:translateX(100%);
+  transition:transform .28s cubic-bezier(.2,.7,.2,1);display:flex;flex-direction:column;border-left:1px solid var(--border)}
+.sheet.open{transform:translateX(0)}
+.sheet header{display:flex;align-items:flex-start;gap:14px;padding:26px 26px 20px;border-bottom:1px solid var(--border)}
+.sheet header .sh-src{width:4px;align-self:stretch;border-radius:3px;background:var(--cyan)}
+.sheet header .sh-main{flex:1;min-width:0}
+.sheet header h2{font-size:21px;font-weight:600;margin:0 0 5px;line-height:1.25;letter-spacing:-.02em;color:var(--black)}
+.sheet header .co{color:var(--silver-2);font-size:14px}
+.sheet .xbtn{border:1px solid var(--border);background:var(--surface);width:36px;height:36px;border-radius:11px;
+  font-size:18px;color:var(--muted);flex-shrink:0;transition:all .16s}
+.sheet .xbtn:hover{border-color:var(--border-cyan);color:var(--cyan-deep)}
+.sbody{padding:22px 26px 32px;overflow-y:auto;flex:1}
+.sbody .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border-soft);
+  border:1px solid var(--border-soft);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:24px}
+.sbody .grid2 .cell{padding:12px 14px}
+.sbody .grid2 .cell .v{white-space:normal}
+.sbody .grid2 .cell:last-child:nth-child(odd){grid-column:1/-1}
+.slabel{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 10px}
+.sdesc{font-size:14.5px;line-height:1.62;color:var(--silver);white-space:pre-line;margin:0 0 24px}
+.sskills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.openbtn{display:inline-flex;align-items:center;gap:10px;background:var(--cyan);color:var(--on-cyan);border:0;
+  padding:14px 24px;border-radius:14px;font-size:14.5px;font-weight:600;text-decoration:none;
+  box-shadow:0 6px 20px -6px rgba(0,188,212,.5);transition:transform .18s cubic-bezier(.2,.7,.2,1),box-shadow .25s,background .2s}
+.openbtn:hover{transform:translateY(-2px);background:var(--cyan-bright);box-shadow:0 12px 34px -8px rgba(0,188,212,.6)}
+
+@media (max-width:880px){
+  .layout{grid-template-columns:1fr}
+  .rail{position:fixed;top:0;left:0;bottom:0;width:300px;z-index:55;background:var(--bg);height:100vh;
+    transform:translateX(-100%);transition:transform .24s;box-shadow:0 20px 60px -20px rgba(0,0,0,.3)}
+  .rail.open{transform:translateX(0)}
+  .filterToggle{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);
+    background:var(--surface);padding:11px 14px;border-radius:12px;font-size:13px;font-weight:500;color:var(--black)}
+  .count{display:none}
+  .topbar{gap:10px 12px;padding:11px 14px;flex-wrap:wrap}
+  .tagline{display:none}
+  .brand{margin-right:auto}
+  .searchwrap{order:5;flex-basis:100%;max-width:none;min-width:0}
+  .results{padding:20px 16px 76px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="topbar" id="topbar">
+  <button class="filterToggle" id="railToggle" aria-label="Toggle filters">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filters
+  </button>
+  <div class="brand">
+    <span class="wordmark"><span class="gr-silver">Oman</span><span class="gr-cyan">Jobs</span></span>
+    <span class="tagline">Oman · directory</span>
+  </div>
+  <div class="searchwrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <input id="q" type="text" placeholder="Search titles, companies, skills, descriptions…" autocomplete="off" spellcheck="false">
+  </div>
+  <div class="count"><div class="big gr-cyan" id="totalCount">—</div><div class="lbl">listings</div></div>
+</header>
+
+<div class="layout">
+  <aside class="rail" id="rail">
+    <div class="fgroup">
+      <span class="eyebrow">Sources</span>
+      <div id="sourceList"></div>
+    </div>
+    <div class="fgroup">
+      <span class="eyebrow">Location</span>
+      <input class="locinput" id="loc" type="text" placeholder="City or area…" autocomplete="off">
+      <div class="chips" id="cityChips"></div>
+    </div>
+    <div class="fgroup">
+      <span class="eyebrow">Only show</span>
+      <div class="togglerow"><span>With description</span><button class="switch" id="tDesc" aria-pressed="false" aria-label="Only jobs with a description"></button></div>
+      <div class="togglerow"><span>With skills listed</span><button class="switch" id="tSkills" aria-pressed="false" aria-label="Only jobs with skills"></button></div>
+    </div>
+    <button class="clearbtn" id="clearAll">Reset all filters</button>
+  </aside>
+
+  <main class="results">
+    <div class="toolbar">
+      <span class="showing" id="showing">Loading…</span>
+      <div class="sortwrap">
+        <label for="sort">Sort</label>
+        <select id="sort">
+          <option value="recent">Source order</option>
+          <option value="az">Title A–Z</option>
+          <option value="za">Title Z–A</option>
+          <option value="company">Company A–Z</option>
+        </select>
+      </div>
+    </div>
+    <div class="activebar" id="activebar"></div>
+    <div class="grid" id="grid">
+      <div class="state"><div class="spinner"></div>Fetching every Oman listing…</div>
+    </div>
+    <div class="pager" id="pager"></div>
+  </main>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+<aside class="sheet" id="sheet" aria-hidden="true" role="dialog" aria-modal="true"></aside>
+
+<script src="./jobs.js"></script>
+<script>
+const SOURCES = ['naukrigulf','opensooq','indeed'];
+const SOURCE_ORDER = {naukrigulf:0, opensooq:1, indeed:2};
+const CITIES = ['Muscat','Sohar','Salalah','Al Batinah','Dhofar','Seeb','Barka','Nizwa','Sur'];
+const PAGE_SIZE = 24;
+
+let ALL = [];
+const state = {q:'', loc:'', sources:new Set(), hasDesc:false, hasSkills:false, sort:'recent', page:1};
+const $ = s => document.querySelector(s);
+const esc = s => (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function debounce(fn,ms){let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
+function prettyType(v){ if(!v || !/^[A-Z][A-Z_]+$/.test(v)) return v;
+  const s=v.replace(/_/g,' ').toLowerCase(); return s.charAt(0).toUpperCase()+s.slice(1); }
+
+async function boot(){
+  try{ ALL = window.JOBS || await (await fetch('/api/jobs')).json(); }
+  catch(e){ $('#grid').innerHTML='<div class="state"><div class="em">Could not load jobs</div>'+esc(e.message)+'</div>'; return; }
+  ALL.forEach((j,i)=>{ j._i=i; j._sk=Array.isArray(j.skills)?j.skills:[];
+    j._hay=((j.title||'')+' '+(j.company||'')+' '+(j.location||'')+' '+(j.description||'')+' '+j._sk.join(' ')).toLowerCase(); });
+  SOURCES.forEach(s=>state.sources.add(s));
+  $('#totalCount').textContent = ALL.length.toLocaleString();
+  buildSourceList(); buildCityChips(); render();
+}
+function counts(){ const c={}; ALL.forEach(j=>c[j.source]=(c[j.source]||0)+1); return c; }
+function buildSourceList(){
+  const c=counts();
+  $('#sourceList').innerHTML = SOURCES.map(s=>`
+    <button class="srcrow" data-src="${s}" aria-pressed="true">
+      <span class="dot"></span><span class="nm">${s}</span><span class="ct">${(c[s]||0).toLocaleString()}</span>
+    </button>`).join('');
+  document.querySelectorAll('.srcrow').forEach(b=>b.onclick=()=>{
+    const s=b.dataset.src;
+    if(state.sources.has(s)) state.sources.delete(s); else state.sources.add(s);
+    if(state.sources.size===0) state.sources.add(s);
+    b.setAttribute('aria-pressed', state.sources.has(s)); state.page=1; render();
+  });
+}
+function buildCityChips(){
+  $('#cityChips').innerHTML = CITIES.map(c=>`<button class="chip" data-city="${c}" aria-pressed="false">${c}</button>`).join('');
+  document.querySelectorAll('.chip[data-city]').forEach(b=>b.onclick=()=>{
+    const c=b.dataset.city, on=b.getAttribute('aria-pressed')==='true';
+    document.querySelectorAll('.chip[data-city]').forEach(x=>x.setAttribute('aria-pressed','false'));
+    state.loc=on?'':c; $('#loc').value=state.loc; if(!on) b.setAttribute('aria-pressed','true');
+    state.page=1; render();
+  });
+}
+function apply(){
+  const q=state.q.toLowerCase(), loc=state.loc.toLowerCase();
+  let out=ALL.filter(j=>{
+    if(!state.sources.has(j.source)) return false;
+    if(q && !j._hay.includes(q)) return false;
+    if(loc && !(j.location||'').toLowerCase().includes(loc)) return false;
+    if(state.hasDesc && !(j.description||'').trim()) return false;
+    if(state.hasSkills && j._sk.length===0) return false;
+    return true;
+  });
+  const A=x=>(x.title||'').toLowerCase(), C=x=>(x.company||'~').toLowerCase();
+  if(state.sort==='az') out.sort((a,b)=>A(a)<A(b)?-1:1);
+  else if(state.sort==='za') out.sort((a,b)=>A(a)>A(b)?-1:1);
+  else if(state.sort==='company') out.sort((a,b)=>C(a)<C(b)?-1:1);
+  else out.sort((a,b)=>  // default: NaukriGulf, then OpenSooq, then Indeed; recent within each
+    (SOURCE_ORDER[a.source]-SOURCE_ORDER[b.source]) || (b.scraped_at||'').localeCompare(a.scraped_at||''));
+  return out;
+}
+function cell(k,v,wrap){ if(!v) return '';
+  return `<div class="cell"><span class="k">${k}</span><span class="v${wrap?' wrap':''}" dir="auto">${esc(v)}</span></div>`; }
+function cardHTML(j){
+  const cells=[cell('Location',j.location),cell('Detail',prettyType(j.job_type)),
+               cell('Salary',j.salary),cell('Posted',j.posted)].filter(Boolean);
+  const box=cells.length?`<div class="databox${cells.length===1?' one':''}">${cells.join('')}</div>`:'';
+  const sk=j._sk.slice(0,5).map(s=>`<span class="skill">${esc(s)}</span>`).join('')
+         +(j._sk.length>5?`<span class="more">+${j._sk.length-5}</span>`:'');
+  const desc=j.description?`<p class="cdesc" dir="auto">${esc(j.description)}</p>`:'';
+  const company=j.company?`<div class="ccompany"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M9 13h.01M9 17h.01M15 9h.01M15 13h.01M15 17h.01"/></svg><span dir="auto">${esc(j.company)}</span></div>`:'';
+  return `<article class="card" tabindex="0" data-i="${j._i}">
+    <div class="chead"><span class="srctag">${j.source}</span>${j.posted?`<span class="posted">${esc(j.posted)}</span>`:''}</div>
+    <h3 class="ctitle" dir="auto">${esc(j.title)}</h3>
+    ${company}${box}${desc}
+    ${j._sk.length?`<div class="skills">${sk}</div>`:''}
+  </article>`;
+}
+function render(){
+  const res=apply(), total=res.length, pages=Math.max(1,Math.ceil(total/PAGE_SIZE));
+  if(state.page>pages) state.page=pages;
+  const start=(state.page-1)*PAGE_SIZE, slice=res.slice(start,start+PAGE_SIZE), grid=$('#grid');
+  if(total===0){ grid.innerHTML=`<div class="state"><div class="em">No matching jobs</div>Try a broader search or reset the filters.</div>`; }
+  else{
+    grid.innerHTML=slice.map(cardHTML).join('');
+    grid.querySelectorAll('.card').forEach(c=>{
+      const j=ALL[+c.dataset.i];
+      c.onclick=()=>openSheet(j);
+      c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openSheet(j)}};
+      c.querySelectorAll('.skill').forEach((el,idx)=>{el.onclick=e=>{e.stopPropagation();state.q=j._sk[idx];$('#q').value=state.q;state.page=1;render();};});
+    });
+  }
+  $('#showing').innerHTML=total?`Showing <b>${start+1}–${Math.min(start+PAGE_SIZE,total)}</b> of <b>${total.toLocaleString()}</b> matches`:'No matches';
+  renderActive(); renderPager(pages);
+}
+let _pillId=0; const _pillFns={};
+function pill(label,clear){ const id='p'+(_pillId++); _pillFns[id]=clear;
+  return `<span class="pill">${esc(label)}<button data-pill="${id}">×</button></span>`; }
+function renderActive(){
+  const bar=$('#activebar'), p=[];
+  if(state.q) p.push(pill('search: “'+state.q+'”',()=>{state.q='';$('#q').value='';}));
+  if(state.loc) p.push(pill('in '+state.loc,()=>{state.loc='';$('#loc').value='';document.querySelectorAll('.chip[data-city]').forEach(x=>x.setAttribute('aria-pressed','false'));}));
+  if(state.hasDesc) p.push(pill('has description',()=>{state.hasDesc=false;$('#tDesc').setAttribute('aria-pressed','false');}));
+  if(state.hasSkills) p.push(pill('has skills',()=>{state.hasSkills=false;$('#tSkills').setAttribute('aria-pressed','false');}));
+  const off=SOURCES.filter(s=>!state.sources.has(s));
+  if(off.length && off.length<3) p.push(`<span class="pill" style="background:var(--bg-2);color:var(--muted);border-color:var(--border)">${3-off.length}/3 sources</span>`);
+  bar.innerHTML=p.join('');
+}
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-pill]'); if(!b) return;
+  const fn=_pillFns[b.dataset.pill]; if(fn){fn();state.page=1;render();} });
+function renderPager(pages){
+  const el=$('#pager'); if(pages<=1){el.innerHTML='';return;}
+  const cur=state.page, out=[], btn=(n,lbl,on,dis)=>`<button ${dis?'disabled':''} class="${on?'on':''}" data-pg="${n}">${lbl||n}</button>`;
+  out.push(btn(cur-1,'‹',false,cur===1));
+  const set=new Set([1,2,pages-1,pages,cur-1,cur,cur+1]); let last=0;
+  for(let n=1;n<=pages;n++){ if(!set.has(n))continue; if(n-last>1) out.push('<span class="gap">…</span>');
+    out.push(btn(n,null,n===cur,false)); last=n; }
+  out.push(btn(cur+1,'›',false,cur===pages));
+  el.innerHTML=out.join('');
+  el.querySelectorAll('[data-pg]').forEach(b=>b.onclick=()=>{state.page=Math.max(1,Math.min(pages,+b.dataset.pg));render();window.scrollTo({top:0,behavior:'smooth'});});
+}
+function openSheet(j){
+  const cells=[['Source',j.source],['Location',j.location],['Detail / Experience',prettyType(j.job_type)],
+    ['Salary',j.salary],['Posted',j.posted],['Company',j.company]].filter(x=>x[1]);
+  const box=`<div class="grid2">${cells.map(([k,v])=>`<div class="cell"><span class="k">${k}</span><span class="v" dir="auto">${esc(v)}</span></div>`).join('')}</div>`;
+  const skills=j._sk.length?`<p class="slabel">Skills</p><div class="sskills">${j._sk.map(s=>`<span class="skill">${esc(s)}</span>`).join('')}</div>`:'';
+  const desc=j.description?`<p class="slabel">Description</p><p class="sdesc" dir="auto">${esc(j.description)}</p>`
+    :'<p class="slabel">Description</p><p class="sdesc" style="color:var(--dim)">No description captured for this listing — open the original posting for full details.</p>';
+  $('#sheet').innerHTML=`
+    <header><span class="sh-src"></span>
+      <div class="sh-main"><h2 dir="auto">${esc(j.title)}</h2>${j.company?`<div class="co" dir="auto">${esc(j.company)}</div>`:''}</div>
+      <button class="xbtn" id="closeSheet" aria-label="Close">×</button></header>
+    <div class="sbody">${box}${desc}${skills}
+      <a class="openbtn" href="${esc(j.url)}" target="_blank" rel="noopener">Open original posting
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+    </div>`;
+  $('#closeSheet').onclick=closeSheet;
+  $('#sheet').classList.add('open'); $('#sheet').setAttribute('aria-hidden','false'); $('#backdrop').classList.add('open');
+}
+function closeSheet(){ $('#sheet').classList.remove('open'); $('#sheet').setAttribute('aria-hidden','true'); $('#backdrop').classList.remove('open'); }
+
+$('#q').addEventListener('input',debounce(e=>{state.q=e.target.value.trim();state.page=1;render();},180));
+$('#loc').addEventListener('input',debounce(e=>{state.loc=e.target.value.trim();state.page=1;
+  document.querySelectorAll('.chip[data-city]').forEach(x=>x.setAttribute('aria-pressed','false'));render();},180));
+$('#sort').addEventListener('change',e=>{state.sort=e.target.value;render();});
+$('#tDesc').onclick=function(){state.hasDesc=!state.hasDesc;this.setAttribute('aria-pressed',state.hasDesc);state.page=1;render();};
+$('#tSkills').onclick=function(){state.hasSkills=!state.hasSkills;this.setAttribute('aria-pressed',state.hasSkills);state.page=1;render();};
+$('#clearAll').onclick=()=>{
+  state.q='';state.loc='';state.hasDesc=false;state.hasSkills=false;state.sort='recent';state.page=1;
+  state.sources=new Set(SOURCES); $('#q').value='';$('#loc').value='';$('#sort').value='recent';
+  document.querySelectorAll('.srcrow').forEach(b=>b.setAttribute('aria-pressed','true'));
+  document.querySelectorAll('.chip[data-city]').forEach(x=>x.setAttribute('aria-pressed','false'));
+  $('#tDesc').setAttribute('aria-pressed','false');$('#tSkills').setAttribute('aria-pressed','false'); render();
+};
+$('#backdrop').onclick=closeSheet;
+$('#railToggle').onclick=()=>$('#rail').classList.toggle('open');
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeSheet();
+  if(e.key==='/'&&document.activeElement!==$('#q')){e.preventDefault();$('#q').focus();} });
+addEventListener('scroll',()=>{$('#topbar').setAttribute('data-scrolled', window.scrollY>4);},{passive:true});
+boot();
+</script>
+</body>
+</html>
